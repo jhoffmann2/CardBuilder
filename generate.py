@@ -15,7 +15,8 @@ from html2image import Html2Image
 
 from PIL import Image, ImageFile
 
-
+cards_per_sheet = 50
+column_count = 10
 
 def svg_tag(basic_tag):
     return '{http://www.w3.org/2000/svg}' + basic_tag
@@ -106,9 +107,6 @@ def make_sheet(name, df):
     template_root = tree.getroot()
     template_card = template_root.find(svg_tag('g'))
 
-    cards_per_sheet = 50
-    column_count = 10
-
     # scale viewport to fit all the cards
     (view_x, view_y, card_w, card_h) = template_root.attrib['viewBox'].split()
 
@@ -178,13 +176,13 @@ def export_sheet(view_x, view_y, card_w, card_h, column_count, row_count, svg, s
     print(f'Exporting sheet: {filename}')
     etree.ElementTree(svg).write(filename, pretty_print=True)
 
-    # hti = Html2Image(size=(1920*2, 1080*2))
-    # hti.screenshot(other_file=filename, save_as=f'temp.png')
-    # im = Image.open(f'temp.png')
-    # im.getbbox()
-    # im2 = im.crop(im.getbbox())
-    # im2.save(f'output/{sheet_name}.png')
-    # os.remove('temp.png')
+    hti = Html2Image(size=(1920*2, 1080*2))
+    hti.screenshot(other_file=filename, save_as=f'temp.png')
+    im = Image.open(f'temp.png')
+    im.getbbox()
+    im2 = im.crop(im.getbbox())
+    im2.save(f'output/{sheet_name}.png')
+    os.remove('temp.png')
 
 
 def main():
